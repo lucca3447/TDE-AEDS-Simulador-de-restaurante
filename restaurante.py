@@ -72,6 +72,76 @@ cardapio = [
     {"nome": "Vitamina de mamão", "preco": 10.00},
     {"nome": "Vitamina de banana", "preco": 10.00},
     {"nome": "Vitamina de abacate", "preco": 11.00},
+    
 ]
 
-print("=====Simulador de restaurante")
+NUM_MESAS = 10  
+NUM_ITENS = len(cardapio)
+
+consumo_mesas = [[0 for i in range(NUM_ITENS)] for i in range(NUM_MESAS)]
+
+pedidos_ativos = [[] for i in range(NUM_MESAS)]
+
+historico = []
+
+def mostrar_cardapio():
+    print("\n--- CARDÁPIO ---")
+    for i, item in enumerate(cardapio):
+        print(f"{i}: {item['nome']} - R$ {item['preco']:.2f}")
+    print("\n")
+
+def abrir_pedido(mesa):
+    mostrar_cardapio()
+    item_id = int(input("Digite o número do item: "))
+    quantidade = int(input("Quantidade:"))
+    
+    consumo_mesas[mesa][item_id] += quantidade
+    pedidos_ativos[mesa].append((item_id, quantidade))
+    historico.append(f"Mesa {mesa+1} pediu {quantidade}x {cardapio[item_id]['nome']}")
+    print("Pedido registrado!\n")
+
+def fechar_conta(mesa):
+    total = 0
+    for item_id, quantidade in pedidos_ativos[mesa]:
+        total += cardapio[item_id]["preco"] * quantidade
+    print(f"Total da mesa {mesa+1}: R$ {total:.2f}\n")
+    pedidos_ativos[mesa] = []
+    historico.append(f"Mesa {mesa+1} fechou a conta")
+
+def mostrar_historico():
+    print("\n--- HISTÓRICO ---")
+    for acao in reversed(historico):
+        print(acao)
+    print("----------------\n")
+
+
+
+
+while True:
+        print("\n=== SIMULADOR DE RESTAURANTE ===")
+        print("1 - Abrir pedido para mesa")
+        print("2 - Fechar conta da mesa")
+        print("3 - Mostrar cardápio")
+        print("4 - Mostrar histórico")
+        print("5 - Sair")
+        
+        escolha = input("Escolha uma opção: ")
+        
+        match escolha:
+            case "1":
+                mesa = int(input("Número da mesa (1-10): ")) - 1
+                abrir_pedido(mesa)
+            case "2":
+                mesa = int(input("Número da mesa (1-3): ")) - 1
+                fechar_conta(mesa)
+            case "3":
+                mostrar_cardapio()
+            case "4":
+                mostrar_historico()
+            case "5":
+                print("Saindo...")
+                break
+            case _:
+                print("Opção inválida, tente novamente!")
+
+
