@@ -1,0 +1,1 @@
+Simulador de restaurante. TDE de algoritimo e estrutura de dados.
