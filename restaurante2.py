@@ -80,5 +80,31 @@ def exibir_cardapio():
         print(f"{i}:{prato["nome"]} - R$ {prato["preco"]:.2f} ")
     print("\n")
 
+n_de_mesas = 10
 
+pedidos_ativos =  [[] for i in range(n_de_mesas)]
+
+def abrir_pedido(mesa):
+    print("======ABRIR PEDIDO=====")
+    exibir_cardapio()
+    print("\n")
     
+    id_prato = int(input("Qual o número do prato deseja pedir?\n"))
+    quantidade = int(input("Qual a quantidade?"))
+   
+    pedidos_ativos[mesa].append((id_prato, quantidade))
+
+    print(f"Pedido feito com sucesso!: {quantidade} x {cardapio[id_prato]['nome']}\n ")
+
+def fechar_pedido(mesa):
+    total= 0
+    for prato_id, quantidade in pedidos_ativos[mesa]:
+        total += cardapio[prato_id]["preco"]* quantidade
+
+    print(f"Total da mesa {mesa+1}: {total:.2f} R$")
+
+    pedidos_ativos[mesa] = []
+
+
+
+
