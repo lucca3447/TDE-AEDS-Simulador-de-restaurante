@@ -1,3 +1,5 @@
+import os
+
 cardapio = [
     {"nome": "Arroz branco", "preco": 5.00},
     {"nome": "Feijão carioca", "preco": 6.00},
@@ -77,7 +79,7 @@ cardapio = [
 def exibir_cardapio():
     print("Cardápio: ")
     for i,prato in enumerate(cardapio):
-        print(f"{i}:{prato["nome"]} - R$ {prato["preco"]:.2f} ")
+        print(f"{i}:{prato['nome']} - R$ {prato['preco']:.2f} ")
     print("\n")
 
 n_de_mesas = 10
@@ -105,14 +107,57 @@ def fechar_pedido(mesa):
 
     pedidos_ativos[mesa] = []
 
-def pedidos_ativos():
+def exibir_pedidos_ativos():
     print("=====PEDIDOS ATIVOS=====")
     for n_mesa, pedidos in enumerate(pedidos_ativos):
         if pedidos:
             print(f"Mesa {n_mesa+1}:")
             for prato_id, quantidade in pedidos:
                 prato= cardapio[prato_id]
-                print(f" {quantidade}x {prato['nome']} - R$ {prato['preco']:2.f} cada")
+                print(f" {quantidade}x {prato['nome']} - R$ {prato['preco']:.2f} cada")
                 print("\n")
 
+def limpar_tela():
+    os.system("cls")
 
+
+while True:
+    limpar_tela()
+    
+    print("=====KEVONES'S RESTAURANT=====\n")
+    print("Selecione o que deseja fazer 1 a 5")
+    print("1 - Abrir cardápio ")
+    print("2 - Fazer pedido ")
+    print("3- Fechar conta de mesa ")
+    print("4- Lista de pedidos ativos ")
+    print("5- Sair")
+
+    escolha = (input("\n"))
+
+
+    match escolha:
+        case "1":
+            exibir_cardapio()
+            input("Presione enter para continuar...")
+        case "2":
+            mesa = int(input("Para  qual mesa deseja abrir o pedido?(1-10)\n"))-1
+            abrir_pedido(mesa)
+            input("Presione enter para continuar...")
+        case "3":
+            mesa = int(input("Para  qual mesa deseja fechar o pedido? (1-10)\n"))-1
+            fechar_pedido(mesa)
+            input("Presione enter para continuar...")
+        case "4":
+            exibir_pedidos_ativos()
+            input("Presione enter para continuar...")
+        case "5":
+            confirmar = input("Tem certeza que deseja sair? (S/N): ").strip().upper()
+            if confirmar == "S":
+                print("Saindo...")
+                break
+            else:
+                print("Voltando ao menu...")
+                input("Presione enter para continuar...")
+        case _:
+            print("Opção invalida")
+            input("Presione enter para continuar...")         
