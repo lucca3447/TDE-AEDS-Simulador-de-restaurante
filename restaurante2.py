@@ -105,6 +105,14 @@ def fechar_pedido(mesa):
 
     pedidos_ativos[mesa] = []
 
-
+def pedidos_ativos():
+    print("=====PEDIDOS ATIVOS=====")
+    for n_mesa, pedidos in enumerate(pedidos_ativos):
+        if pedidos:
+            print(f"Mesa {n_mesa+1}:")
+            for prato_id, quantidade in pedidos:
+                prato= cardapio[prato_id]
+                print(f" {quantidade}x {prato['nome']} - R$ {prato['preco']:2.f} cada")
+                print("\n")
 
 
