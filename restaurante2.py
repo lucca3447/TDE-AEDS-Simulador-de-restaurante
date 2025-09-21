@@ -115,7 +115,7 @@ def exibir_pedidos_ativos():
             for prato_id, quantidade in pedidos:
                 prato= cardapio[prato_id]
                 print(f" {quantidade}x {prato['nome']} - R$ {prato['preco']:.2f} cada")
-                print("\n")
+                
 
 def limpar_tela():
     os.system("cls")
