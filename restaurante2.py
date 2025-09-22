@@ -78,52 +78,65 @@ cardapio = [
 
 def exibir_cardapio():
     print("Cardápio: ")
-    for i,prato in enumerate(cardapio):
+    for i, prato in enumerate(cardapio):
         print(f"{i}:{prato['nome']} - R$ {prato['preco']:.2f} ")
     print("\n")
 
 n_de_mesas = 10
-
-pedidos_ativos =  [[] for i in range(n_de_mesas)]
+pedidos_ativos = [[] for i in range(n_de_mesas)]
 
 def abrir_pedido(mesa):
-    print("======ABRIR PEDIDO=====")
-    exibir_cardapio()
-    print("\n")
-    
-    id_prato = int(input("Qual o número do prato deseja pedir?\n"))
-    quantidade = int(input("Qual a quantidade?"))
-   
-    pedidos_ativos[mesa].append((id_prato, quantidade))
+    try:
+        print("======ABRIR PEDIDO=====")
+        exibir_cardapio()
+        print("\n")
 
-    print(f"Pedido feito com sucesso!: {quantidade} x {cardapio[id_prato]['nome']}\n ")
+        id_prato = int(input("Qual o número do prato deseja pedir?\n"))
+        if id_prato < 0 or id_prato >= len(cardapio):
+            print("Número do prato inválido!")
+            return
+
+        quantidade = int(input("Qual a quantidade? "))
+        if quantidade <= 0:
+            print("Quantidade deve ser maior que 0!")
+            return
+
+        pedidos_ativos[mesa].append((id_prato, quantidade))
+        print(f"Pedido feito com sucesso!: {quantidade} x {cardapio[id_prato]['nome']}\n ")
+    except ValueError:
+        print("Entrada inválida! Digite apenas números!")
 
 def fechar_pedido(mesa):
-    total= 0
+    if not pedidos_ativos[mesa]:
+        print(f"Nenhum pedido ativo para a mesa {mesa+1}.")
+        return
+
+    total = 0
     for prato_id, quantidade in pedidos_ativos[mesa]:
-        total += cardapio[prato_id]["preco"]* quantidade
+        total += cardapio[prato_id]["preco"] * quantidade
 
     print(f"Total da mesa {mesa+1}: {total:.2f} R$")
-
     pedidos_ativos[mesa] = []
 
 def exibir_pedidos_ativos():
     print("=====PEDIDOS ATIVOS=====")
+    encontrou = False
     for n_mesa, pedidos in enumerate(pedidos_ativos):
         if pedidos:
+            encontrou = True
             print(f"Mesa {n_mesa+1}:")
             for prato_id, quantidade in pedidos:
-                prato= cardapio[prato_id]
+                prato = cardapio[prato_id]
                 print(f" {quantidade}x {prato['nome']} - R$ {prato['preco']:.2f} cada")
-                
+    if not encontrou:
+        print("Nenhum pedido ativo no momento.")
 
 def limpar_tela():
     os.system("cls")
 
-
 while True:
     limpar_tela()
-    
+
     print("=====KEVONES'S RESTAURANT=====\n")
     print("Selecione o que deseja fazer 1 a 5")
     print("1 - Abrir cardápio ")
@@ -132,20 +145,31 @@ while True:
     print("4- Lista de pedidos ativos ")
     print("5- Sair")
 
-    escolha = (input("\n"))
-
+    escolha = input("\n")
 
     match escolha:
         case "1":
             exibir_cardapio()
             input("Presione enter para continuar...")
         case "2":
-            mesa = int(input("Para  qual mesa deseja abrir o pedido?(1-10)\n"))-1
-            abrir_pedido(mesa)
+            try:
+                mesa = int(input("Para qual mesa deseja abrir o pedido?(1-10)\n")) - 1
+                if mesa < 0 or mesa >= n_de_mesas:
+                    print("Número de mesa inválido!")
+                else:
+                    abrir_pedido(mesa)
+            except ValueError:
+                print("Entrada inválida! Digite apenas números.")
             input("Presione enter para continuar...")
         case "3":
-            mesa = int(input("Para  qual mesa deseja fechar o pedido? (1-10)\n"))-1
-            fechar_pedido(mesa)
+            try:
+                mesa = int(input("Para qual mesa deseja fechar o pedido? (1-10)\n")) - 1
+                if mesa < 0 or mesa >= n_de_mesas:
+                    print("Número de mesa inválido!")
+                else:
+                    fechar_pedido(mesa)
+            except ValueError:
+                print("Entrada inválida! Digite apenas números.")
             input("Presione enter para continuar...")
         case "4":
             exibir_pedidos_ativos()
@@ -159,5 +183,5 @@ while True:
                 print("Voltando ao menu...")
                 input("Presione enter para continuar...")
         case _:
-            print("Opção invalida")
-            input("Presione enter para continuar...")         
+            print("Opção inválida!")
+            input("Presione enter para continuar...")
